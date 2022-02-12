@@ -33,46 +33,25 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-
-resource "aws_security_group" "allow_ssh" {
+module "allow_ssh_sg" {
+  source      = "./security_group"
   name        = "shimizu-example-allow-ssh"
   description = "Allow inbound SSH traffic"
   vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-    cidr_blocks = [
-      var.local_ip,   # https://checkip.amazonaws.com/ でローカル端末の IP アドレスがわかる
-      "3.112.23.0/29" # EC2 クライアントコンソールからアクセスするとき。AWS の IP アドレス範囲。
-    ]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  port        = 22
+  cidr_blocks = [
+    var.local_ip,   # https://checkip.amazonaws.com/ でローカル端末の IP アドレスがわかる
+    "3.112.23.0/29" # EC2 クライアントコンソールからアクセスするとき。AWS の IP アドレス範囲。
+  ]
 }
 
-resource "aws_security_group" "allow_http" {
+module "allow_http_sg" {
+  source      = "./security_group"
   name        = "shimizu-example-allow-http"
   description = "Allow inbound HTTP traffic"
   vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  port        = 80
+  cidr_blocks = ["0.0.0.0/0"]
 }
 
 /*
@@ -84,7 +63,7 @@ resource "aws_instance" "example" {
   ami                    = "ami-08a8688fb7eacb171"
   instance_type          = "t2.micro"
   subnet_id              = module.vpc.public_subnets[0]
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id, aws_security_group.allow_http.id]
+  vpc_security_group_ids = [module.allow_ssh_sg.id, module.allow_http_sg.id]
   key_name               = aws_key_pair.example.id
 }
 resource "aws_key_pair" "example" {

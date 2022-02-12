@@ -3,8 +3,8 @@
 
 example
 example.pub
-
 Makefile
+.envrc
 
 
 # Local .terraform directories

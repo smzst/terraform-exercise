@@ -1,6 +1,32 @@
 # terraform-exercise
 
+Makefile, .envrc, example, example.pub ファイルが存在する前提。最後の二つは公開鍵ファイル。
+
+```makefile
+# Makefile
+LOCAL_IP = "local_ip=xxx.xxx.xxx.xx/32" # 変える
+DB_PASSWORD = "db_password=CHANGEME"    # 変える
+
+plan:
+	. ./.envrc && terraform plan -var $(LOCAL_IP) -var $(DB_PASSWORD)
+
+apply:
+	. ./.envrc && terraform apply -var $(LOCAL_IP) -var $(DB_PASSWORD)
+
+destroy:
+	. ./.envrc && terraform destroy -var $(LOCAL_IP) -var $(DB_PASSWORD)
+```
+
+```bash
+# .envrc
+export AWS_ACCESS_KEY_ID="AAAAAAAAAAAAA"               # 変える
+export AWS_SECRET_ACCESS_KEY="XXXXXXXXXXXXXXXXXXXXXX"  # 変える
+```
+
 ## メモ書き
+
+<details>
+
 * Terraform の .gitignore ファイルはここ
     * https://github.com/github/gitignore/blob/main/Terraform.gitignore
 * PostgreSQL のバージョンは、RDS だけでなく RDS Proxy の方も考慮する必要がある
@@ -41,3 +67,5 @@
 ### 疑問点
 * Lambda の sg の CIDR をローカル端末のものにしていても異なるアドレスからアクセスできてしまう
 * EC2 のアウトバウンドルールを、5433 の TCP だと繋がらないけど、-1 にすると繋がるのはなぜ？
+
+</details>

@@ -6,8 +6,3 @@ variable "region" {
 variable "local_ip" {
   description = "IP of local machine"
 }
-
-variable "db_password" {
-  description = "RDS root user password"
-  sensitive   = true
-}

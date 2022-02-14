@@ -12,4 +12,6 @@ provider "aws" {
   region = var.region
 }
 
+provider "random" {}
+
 data "aws_availability_zones" "available" {}

@@ -8,6 +8,11 @@ output "rds_endpoint" {
   sensitive = true
 }
 
+output "rds_password" {
+  value     = aws_db_instance.example.password
+  sensitive = true
+}
+
 output "public_subnet_ids" {
   description = "Lambda の設定で使いたいから"
   value       = module.vpc.public_subnets

@@ -9,7 +9,7 @@ resource "aws_db_instance" "example" {
   engine                 = "postgres"
   engine_version         = "12.9" // RDS Proxy が v12 までなので
   username               = "shimizu"
-  password               = var.db_password
+  password               = random_string.rds_password.result
   db_subnet_group_name   = aws_db_subnet_group.example.name
   vpc_security_group_ids = [module.rds_sg.id]
   parameter_group_name   = aws_db_parameter_group.example.name
@@ -26,6 +26,11 @@ resource "aws_db_parameter_group" "example" {
     name  = "log_connections"
     value = "1"
   }
+}
+
+resource "random_string" "rds_password" {
+  length  = 32
+  special = false
 }
 
 /*

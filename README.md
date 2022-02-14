@@ -5,16 +5,15 @@ Makefile, .envrc, example, example.pub ファイルが存在する前提。最�
 ```makefile
 # Makefile
 LOCAL_IP = "local_ip=xxx.xxx.xxx.xx/32" # 変える
-DB_PASSWORD = "db_password=CHANGEME"    # 変える
 
 plan:
-	. ./.envrc && terraform plan -var $(LOCAL_IP) -var $(DB_PASSWORD)
+	. ./.envrc && terraform plan -var $(LOCAL_IP)
 
 apply:
-	. ./.envrc && terraform apply -var $(LOCAL_IP) -var $(DB_PASSWORD)
+	. ./.envrc && terraform apply -var $(LOCAL_IP)
 
 destroy:
-	. ./.envrc && terraform destroy -var $(LOCAL_IP) -var $(DB_PASSWORD)
+	. ./.envrc && terraform destroy -var $(LOCAL_IP)
 ```
 
 ```bash
